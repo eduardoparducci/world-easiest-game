@@ -2,39 +2,40 @@
 
 ## Fase I: Jogador estático (25/09/2019)
 
-  ### Descrição
-  Um jogador em uma área delimitada que termina quando o jogador atinge a posição final.
+### Descrição
+Um jogador em uma área delimitada que termina quando o jogador atinge a posição final.
 
-  1. Classe Mapa
+1. Classe Mapa:
   
-    Atributos:
-    * Dimensões:
-        int altura
-        int largura
-    * Área objetivo:
-        int altura
-        int largura
-        int pos_x
-        int pos_y
-    * Posição de início
-        int pos_x
-        int pos_y
+Atributos    
+- Dimensão:
+    int altura
+    int largura
+- Área objetivo:
+    int altura
+    int largura
+    int pos_x
+    int pos_y
+- Posição de início:
+    int pos_x
+    int pos_y
 
-  2. Classe Jogador
+2. Classe Jogador:
   
-    Atributos:
-    * Posição
-        int pos_x
-        int pos_y
+Atributos
+    
+- Posição
+    int pos_x
+    int pos_y
 
-  3. Classe Tela
-    (Editar métodos)
+3. Classe Tela:
+  (Editar métodos)
 
-  4. Classe Física
-    (Editar métodos)
+4. Classe Física:
+  (Editar métodos)
   
-  5. Classe Teclado
-    (Já implementado)
+5. Classe Teclado:
+  (Já implementado)
 
 ## Fase II: Jogador com obstáculo estático
 
