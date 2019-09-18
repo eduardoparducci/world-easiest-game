@@ -6,22 +6,24 @@
   Um jogador em uma área delimitada que termina quando o jogador atinge a posição final.
 
   1. Classe Mapa
+  
     Atributos:
-    1.1 Dimensões:
+    * Dimensões:
         int altura
         int largura
-    1.2 Área objetivo:
+    * Área objetivo:
         int altura
         int largura
         int pos_x
         int pos_y
-    1.3 Posição de início
+    * Posição de início
         int pos_x
         int pos_y
 
   2. Classe Jogador
+  
     Atributos:
-    2.1 Posição
+    * Posição
         int pos_x
         int pos_y
 
@@ -63,8 +65,11 @@ O visual do jogo é definido da seguinte forma:
 ```
 
 ` | - + ` = Limites do mapa
+
 ` x `     = Obstáculo
+
 ` . `     = Limite da área objetivo
+
 ' █ '     = Jogador (ASCII=219)
 
 
