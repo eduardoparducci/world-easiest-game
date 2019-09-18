@@ -5,36 +5,35 @@
 ### Descrição
 Um jogador em uma área delimitada que termina quando o jogador atinge a posição final.
 
-### 1. Classe Mapa:
-  
-  Atributos    
-  - Dimensão:
-      int altura
-      int largura
-  - Área objetivo:
-      int altura
-      int largura
-      int pos_x
-      int pos_y
-  - Posição de início:
-      int pos_x
-      int pos_y
+### Classe Mapa
 
-### 2. Classe Jogador:
-  
-  Atributos
+1. Dimensão
+   * int altura
+   * int largura
+      
+2. Área objetivo
+   * int altura
+   * int largura
+   * int pos_x
+   * int pos_y
 
-  - Posição
-      int pos_x
-      int pos_y
+3. Posição de início
+   * int pos_x
+   * int pos_y
 
-### 3. Classe Tela:
+### Classe Jogador
+
+1. Posição
+   * int pos_x
+   * int pos_y
+
+### Classe Tela
   (Editar métodos)
 
-### 4. Classe Física:
+### Classe Física
   (Editar métodos)
   
-### 5. Classe Teclado:
+### Classe Teclado
   (Já implementado)
 
 ## Fase II: Jogador com obstáculo estático
