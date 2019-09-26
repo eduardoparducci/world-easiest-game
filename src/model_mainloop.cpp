@@ -1,4 +1,6 @@
-// Desenvolvido por: Eduardo Parducci (170272)
+/* Desenvolvido por: Eduardo  (170272)
+ *                   Henrique (174638)
+ */
 
 #include <iostream>
 #include <chrono>
@@ -14,58 +16,27 @@ uint64_t get_now_ms() {
 
 int main ()
 {
-  // Corpo(float massa, float aceleracao, float velocidade, float posicao, float comprimento, float k, float atrito);
-  Corpo *c0 = new Corpo(10, 0, 0, 3, 15, 80, 0.6);
+  Player *p0 = new Player(1,1);
+  Map *m0 = new Map(1,1);
+  Physics *f = new Physics(p0, m0);
 
-  ListaDeCorpos *l = new ListaDeCorpos();
-  l->add_corpo(c0);
+  Screen *screen = new Screen(m0, p0, 50, 50, 50, 50);
+  screen->init();
 
-  Fisica *f = new Fisica(l);
+  Keyboard *keyboard = new Keyboard();
+  keyboard->init();
 
-  Tela *tela = new Tela(l, 50, 50);
-  tela->init();
-
-  Teclado *teclado = new Teclado();
-  teclado->init();
-
-
-  uint64_t t0;
-  uint64_t t1;
-  uint64_t deltaT;
-  uint64_t T;
-
-  int i = 0;
-
-  T = get_now_ms();
-
-  t1 = T;
   while (1) {
-    // Atualiza timers
-    t0 = t1;
-    t1 = get_now_ms();
-    deltaT = t1-t0;
-
-    // Atualiza modelo
-    f->update(deltaT);
-
-    tela->update();
 
     // Lê o teclado
-    char c = teclado->getchar();
-    if (c=='w') {
-      f->choque();
-    }
-    if (c=='q') {
-      break;
-    }
-    
-    // Condicao de parada (10s)
-    if ( (t1-T) > 100000 ) break;
+    char c = keyboard->getchar();
+    f->walk(c);
+
+    screen->update();
 
     std::this_thread::sleep_for (std::chrono::milliseconds(100));
-    i++;
   }
-  teclado->stop();
-  tela->stop();
+  keyboard->stop();
+  screen->stop();
   return 0;
 }

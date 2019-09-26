@@ -25,6 +25,22 @@ public:
 
 };
 
+class Map {
+private:
+  // Position atributes
+  int x;
+  int y;
+  int old_x;
+  int old_y;
+public:
+  Map(int x, int y);
+  int get_x();
+  int get_y();
+  int get_old_x();
+  int get_old_y();
+
+};
+
 // class ListaDeCorpos {
 // private:
 //   std::vector<Corpo*> *corpos;
