@@ -1,4 +1,7 @@
-// Desenvolvido por: Eduardo Parducci (170272)
+/* Desenvolvido por: Eduardo  (170272)
+ *                   Henrique (174638)
+ */
+
 #include <vector>
 #include "oo_model.hpp"
 #include <iostream>

@@ -1,4 +1,6 @@
-// Desenvolvido por: Eduardo Parducci (170272)
+/* Desenvolvido por: Eduardo  (170272)
+ *                   Henrique (174638)
+ */
 
 #ifndef OO_MODEL_HPP
 #define OO_MODEL_HPP
@@ -6,63 +8,51 @@
 #include <thread>
 #include <vector>
 
-class Corpo {
+class Player {
 private:
-  // Atributos da massa
-  float massa;
-  float velocidade;
-  float posicao;
-  float aceleracao;
-  
-  // Atributos da mola
-  float k;
-  float atrito;
-  float comprimento;
+  // Position atributes
+  int x;
+  int y;
 
 public:
-  Corpo(float massa, float aceleracao, float velocidade, float posicao, float comprimento, float k, float atrito);
-  void update(float nova_aceleracao, float nova_velocidade, float nova_posicao);
-  float get_massa();
-  float get_velocidade();
-  float get_aceleracao();
-  float get_posicao();
-  float get_k();
-  float get_comprimento();
-  float get_atrito();
+  Player(int x, int y);
+  void update(int new_x, int new_y);
+  int get_x();
+  int get_y();
 };
 
-class ListaDeCorpos {
-private:
-  std::vector<Corpo*> *corpos;
+// class ListaDeCorpos {
+// private:
+//   std::vector<Corpo*> *corpos;
 
-public:
-  ListaDeCorpos();
-  void add_corpo(Corpo *c);
-  void hard_copy(ListaDeCorpos *ldc);
-  std::vector<Corpo*> *get_corpos();
-};
+// public:
+//   ListaDeCorpos();
+//   void add_corpo(Corpo *c);
+//   void hard_copy(ListaDeCorpos *ldc);
+//   std::vector<Corpo*> *get_corpos();
+// };
 
-class Fisica {
+class Physics {
 private:
-  ListaDeCorpos *lista;
+  Player *p1;
+  Map *m1;
   
 public:
-  Fisica(ListaDeCorpos *ldc);
-  void add_corpo(Corpo *c);
-  void choque();
-  void update(float deltaT);
+  Physics(Player *p1, Map *m1);
+  // u=Up, d=Down, l=Left, r=Right
+  void walk(char direction);
 };
 
-class Tela {
+class Screen {
   private:
-    ListaDeCorpos *lista, *lista_anterior;
+    Map *m1;
+    Player *p1, *p1_old;
     int maxI, maxJ;
     float maxX, maxY;
 
   public:
-    Tela(ListaDeCorpos *ldc, float maxX, float maxY);
-    // Destrutor
-    ~Tela(); 
+    Screen(Map *m1, float maxX, float maxY);
+    ~Screen(); 
     void stop();
     void init();
     void update();
@@ -70,16 +60,16 @@ class Tela {
 
 void threadfun (char *keybuffer, int *control);
 
-class Teclado {
+class Keyboard {
   private:
-    char ultima_captura;
-    int rodando;
+    char last_char;
+    int running;
 
     std::thread kb_thread;
 
   public:
-    Teclado();
-    ~Teclado();
+    Keyboard();
+    ~Keyboard();
     void stop();
     void init();
     char getchar();
