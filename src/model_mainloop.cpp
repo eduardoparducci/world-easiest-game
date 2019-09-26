@@ -31,7 +31,9 @@ int main ()
     // Lê o teclado
     char c = keyboard->getchar();
     f->walk(c);
-
+    
+    // key 'q' stops the program
+    if(c=='q') break;
     screen->update();
 
     std::this_thread::sleep_for (std::chrono::milliseconds(100));

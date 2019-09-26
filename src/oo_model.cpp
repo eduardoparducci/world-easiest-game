@@ -105,17 +105,17 @@ void Physics::walk(char direction) {
   int old_y = this->p1->get_y();
   
   switch(direction) {
-  case 'w':
+  case 's':
     this->p1->update(old_x, old_y+1);
     break;
-  case 's':
+  case 'w':
     this->p1->update(old_x, old_y-1);
     break;
   case 'd':
     this->p1->update(old_x+1, old_y);
     break;
   case 'a':
-    this->p1->update(old_x-1, old_y+1);
+    this->p1->update(old_x-1, old_y);
     break;
   }
 }
