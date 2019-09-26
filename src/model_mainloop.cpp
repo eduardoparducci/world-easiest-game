@@ -17,7 +17,7 @@ uint64_t get_now_ms() {
 int main ()
 {
   Player *p0 = new Player(1,1);
-  Map *m0 = new Map(1,1);
+  Map *m0 = new Map(8,15);
   Physics *f = new Physics(p0, m0);
 
   Screen *screen = new Screen(m0, p0, 50, 50, 50, 50);
@@ -36,7 +36,7 @@ int main ()
     if(c=='q') break;
     screen->update();
 
-    std::this_thread::sleep_for (std::chrono::milliseconds(100));
+    std::this_thread::sleep_for (std::chrono::milliseconds(50));
   }
   keyboard->stop();
   screen->stop();

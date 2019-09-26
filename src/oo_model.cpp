@@ -11,7 +11,7 @@
 #include <thread>
 
 
-Player::  Player(int x, int y) {
+Player::Player(int x, int y) {
   this->x = x;
   this->y = y;
   this->old_x = x;
@@ -42,58 +42,25 @@ int Player::get_old_y() {
   return this->old_y;
 }
 
-Map::Map(int x, int y) {
-  this->x = x;
-  this->y = y;
+Map::Map(int width, int height) {
+  this->width = width;
+  this->height = height;
 }
 
-int Map::get_x() {
-  return this->x;
+int Map::get_width() {
+  return this->width;
 }
 
-int Map::get_y() {
-  return this->y;
+int Map::get_height() {
+  return this->height;
 }
-
-int Map::get_old_x() {
-  return this->old_x;
-}
-
-int Map::get_old_y() {
-  return this->old_y;
-}
-
-
-// ListaDePlayers::ListaDePlayers() {
-//   this->corpos = new std::vector<Player *>(0);
-// }
-
-// void ListaDePlayers::add_corpo(Player *c) {
-//   (this->corpos)->push_back(c);
-//   std::cout << "Agora tenho: " << this->corpos->size() << " elementos" << std::endl;
-// }
-
-// std::vector<Player*> *ListaDePlayers::get_corpos() {
-//   return (this->corpos);
-// }
-
-// void ListaDePlayers::hard_copy(ListaDePlayers *ldc) {
-//   std::vector<Player *> *corpos = ldc->get_corpos();
-
-//   for (int k=0; k<(int)corpos->size(); k++) {
-//     Player *c = new Player( (*corpos)[k]->get_massa(),\
-//                           (*corpos)[k]->get_aceleracao(),\
-//                           (*corpos)[k]->get_velocidade(),\
-//                           (*corpos)[k]->get_posicao(),\
-//                           (*corpos)[k]->get_comprimento(),\
-//                           (*corpos)[k]->get_k(),\
-//                           (*corpos)[k]->get_atrito()
-//                         );
-//     this->add_corpo(c);
-//   }
-
-// }
   
+bool Map::is_valid(int x, int y) {
+  if(x>=this->width  || x<=0) return false;
+  if(y>=this->height || y<=0) return false;
+  return true;
+}
+
 Physics::Physics(Player *p1, Map *m1) {
   this->p1 = p1;
   this->m1 = m1;
@@ -106,16 +73,16 @@ void Physics::walk(char direction) {
   
   switch(direction) {
   case 's':
-    this->p1->update(old_x, old_y+1);
+    if(m1->is_valid(old_x, old_y+1)) this->p1->update(old_x, old_y+1);
     break;
   case 'w':
-    this->p1->update(old_x, old_y-1);
+    if(m1->is_valid(old_x, old_y-1)) this->p1->update(old_x, old_y-1);
     break;
   case 'd':
-    this->p1->update(old_x+1, old_y);
+    if(m1->is_valid(old_x+1, old_y)) this->p1->update(old_x+1, old_y);
     break;
   case 'a':
-    this->p1->update(old_x-1, old_y);
+    if(m1->is_valid(old_x-1, old_y)) this->p1->update(old_x-1, old_y);
     break;
   }
 }
@@ -134,6 +101,38 @@ void Screen::init() {
   raw();				 /* Line buffering disabled	*/
   curs_set(0);           /* Do not display cursor   */
   getmaxyx(stdscr, this->maxI, this->maxJ);
+
+  // Draw Map on the screen
+  int i;
+  
+  // Corners
+  move(0,0);
+  echochar('+');
+  move(m1->get_height(), 0);
+  echochar('+');
+  move(m1->get_height(), m1->get_width());
+  echochar('+');
+  move(0,m1->get_width());
+  echochar('+');
+  
+  // Vertical Border
+  for(i=1;i<m1->get_height();i++) {
+    move(i,0);
+    echochar('|');
+    move(i,m1->get_width());
+    echochar('|');
+
+  }
+
+  // Horizontal Border
+  for(i=1;i<m1->get_width();i++) {
+    move(0,i);
+    echochar('-');
+    move(m1->get_height(),i);
+    echochar('-');
+  }
+
+  refresh();
 }
 
 void Screen::update() {
@@ -144,7 +143,7 @@ void Screen::update() {
 
   // Draw Player on the screen
   move(this->p1->get_y(), this->p1->get_x());
-  echochar('p');
+  echochar('P');
 
   // Atualiza tela
   refresh();

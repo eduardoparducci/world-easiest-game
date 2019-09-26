@@ -27,30 +27,16 @@ public:
 
 class Map {
 private:
-  // Position atributes
-  int x;
-  int y;
-  int old_x;
-  int old_y;
+  // Map Dimension
+  int height;
+  int width;  
+
 public:
-  Map(int x, int y);
-  int get_x();
-  int get_y();
-  int get_old_x();
-  int get_old_y();
-
+  Map(int width, int height);
+  int get_height();
+  int get_width();
+  bool is_valid(int x, int y);
 };
-
-// class ListaDeCorpos {
-// private:
-//   std::vector<Corpo*> *corpos;
-
-// public:
-//   ListaDeCorpos();
-//   void add_corpo(Corpo *c);
-//   void hard_copy(ListaDeCorpos *ldc);
-//   std::vector<Corpo*> *get_corpos();
-// };
 
 class Physics {
 private:
@@ -59,7 +45,7 @@ private:
   
 public:
   Physics(Player *p1, Map *m1);
-  // u=Up, d=Down, l=Left, r=Right
+  // w=Up, s=Down, a=Left, d=Right
   void walk(char direction);
 };
 
