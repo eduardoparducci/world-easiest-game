@@ -13,12 +13,16 @@ private:
   // Position atributes
   int x;
   int y;
-
+  int old_x;
+  int old_y;
 public:
   Player(int x, int y);
   void update(int new_x, int new_y);
   int get_x();
   int get_y();
+  int get_old_x();
+  int get_old_y();
+
 };
 
 // class ListaDeCorpos {
@@ -46,12 +50,12 @@ public:
 class Screen {
   private:
     Map *m1;
-    Player *p1, *p1_old;
+    Player *p1;
     int maxI, maxJ;
     float maxX, maxY;
 
   public:
-    Screen(Map *m1, float maxX, float maxY);
+    Screen(Map *m1, Player *p1, float maxX, float maxY, int maxI, int maxJ);
     ~Screen(); 
     void stop();
     void init();

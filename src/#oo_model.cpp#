@@ -29,9 +29,9 @@ int Player::get_y() {
   return this->y;
 }
 
-ListaDePlayers::ListaDePlayers() {
-  this->corpos = new std::vector<Player *>(0);
-}
+// ListaDePlayers::ListaDePlayers() {
+//   this->corpos = new std::vector<Player *>(0);
+// }
 
 // void ListaDePlayers::add_corpo(Player *c) {
 //   (this->corpos)->push_back(c);
@@ -64,74 +64,51 @@ Physics::Physics(Player *p1, Map *m1) {
   this->m1 = m1;
 }
 
-void Physics::update(float deltaT) {
+void Physics::walk(char direction) {
 
-  std::vector<Player *> *c = this->lista->get_corpos();
-
-  for (int i = 0; i < (int)(*c).size(); i++) {
-    
-    float v_ant = (*c)[i]->get_velocidade();
-    float x_ant = (*c)[i]->get_posicao();
-    float a_ant = (*c)[i]->get_aceleracao();
-    float m = (*c)[i]->get_massa();
-    float k = (*c)[i]->get_k();
-    float b = (*c)[i]->get_atrito();
-
-    float new_accel = (-1)*((k*x_ant/m) + (b*v_ant/m));
-    float new_vel   = v_ant + (float)deltaT * new_accel/1000;
-    float new_pos   = x_ant + (float)deltaT * new_vel/1000;
-
-    (*c)[i]->update(new_accel, new_vel, new_pos);
-   }
-}
-
-void Physics::choque() {
-  // Atualiza parametros dos corpos!
-  std::vector<Player *> *c = this->lista->get_corpos();
-  for (int i = 0; i < (int)(*c).size(); i++) {
-    (*c)[i]->update((*c)[i]->get_aceleracao(), (*c)[i]->get_velocidade()+(float)15, (*c)[i]->get_posicao());
+  int old_x = this->p1->get_x();
+  int old_y = this->p1->get_y();
+  
+  switch(direction) {
+  case 'u':
+    this->p1->update(old_x, old_y+1);
+    break;
+  case 'd':
+    this->p1->update(old_x, old_y-1);
+    break;
+  case 'r':
+    this->p1->update(old_x+1, old_y);
+    break;
+  case 'l':
+    this->p1->update(old_x-1, old_y+1);
+    break;
   }
 }
 
-Tela::Tela(ListaDePlayers *ldc, float maxX, float maxY) {
-  this->lista = ldc;
-  this->lista_anterior = new ListaDePlayers();
-  this->lista_anterior->hard_copy(this->lista);
-  this->maxI = maxI;
-  this->maxJ = maxJ;
+Screen::Screen(Map *m1, Player *p1, float maxX, float maxY, int maxI, int maxJ) {
+  this->m1 = m1;
+  this->p1 = p1;
   this->maxX = maxX;
   this->maxY = maxY;
+  this->maxJ = maxJ;
+  this->maxI = maxI;
 }
 
-void Tela::init() {
-  initscr();			       /* Start curses mode 		*/
-	raw();				         /* Line buffering disabled	*/
-  curs_set(0);           /* Do not display cursor */
+void Screen::init() {
+  initscr();			 /* Start curses mode 		*/
+  raw();				 /* Line buffering disabled	*/
+  curs_set(0);           /* Do not display cursor   */
   getmaxyx(stdscr, this->maxI, this->maxJ);
 }
 
-void Tela::update() {
+void Screen::update() {
 
-
-  std::vector<Player *> *corpos_old = this->lista_anterior->get_corpos();
-  int i;
   
-  // Apaga corpos na tela
-  for (int k=0; k<(int)corpos_old->size(); k++)
-  {
-    i = ((*corpos_old)[k]->get_comprimento() + (*corpos_old)[k]->get_posicao());
+  // Erase Player from screen
+  move(this->p1->get_y(), this->p1->get_x());
+  echochar(' ');
 
-    move(k, 0);   /* Move cursor to the begining of the line */
-    if(i < this->maxJ) {
-      echochar('\n');
-    }
-  }
-
-  // Desenha corpos na tela
-  std::vector<Player *> *corpos = this->lista->get_corpos();
-
-  for (int k=0; k<(int)corpos->size(); k++)
-  {
+  // Draw Player on the screen
     i = ((*corpos_old)[k]->get_comprimento() + (*corpos_old)[k]->get_posicao());
 
     move(k, 0);   /* Move cursor to the begining of the line */
@@ -158,11 +135,11 @@ void Tela::update() {
   refresh();
 }
 
-void Tela::stop() {
+void Screen::stop() {
   endwin();
 }
 
-Tela::~Tela() {
+Screen::~Screen() {
   this->stop();;
 }
 
