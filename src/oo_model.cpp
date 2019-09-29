@@ -11,6 +11,8 @@
 #include <thread>
 
 
+#define victoryZone 3
+
 Player::Player(int x, int y) {
   this->x = x;
   this->y = y;
@@ -42,9 +44,10 @@ int Player::get_old_y() {
   return this->old_y;
 }
 
-Map::Map(int width, int height) {
+Map::Map(int width, int height, int victory_line) {
   this->width = width;
   this->height = height;
+  this->victory_line = victory_line;
 }
 
 int Map::get_width() {
@@ -53,6 +56,9 @@ int Map::get_width() {
 
 int Map::get_height() {
   return this->height;
+}
+int Map::get_victory_line() {
+  return this->victory_line;
 }
   
 bool Map::is_valid(int x, int y) {
@@ -131,6 +137,13 @@ void Screen::init() {
     move(m1->get_height(),i);
     echochar('-');
   }
+	
+  // Victory Area
+  for(i=1;i<m1->get_width();i++) {
+    move(m1->get_height()-this->m1->get_victory_line(),i);
+    echochar('*');
+  }
+	
 
   refresh();
 }
@@ -138,8 +151,12 @@ void Screen::init() {
 void Screen::update() {
 
   // Erase Player from screen
+  char c;
   move(this->p1->get_old_y(), this->p1->get_old_x());
-  echochar(' ');
+  if(this->p1->get_old_y()==m1->get_height()-this->m1->get_victory_line())
+  	echochar('*');
+	else 
+	  echochar(' ');
 
   // Draw Player on the screen
   move(this->p1->get_y(), this->p1->get_x());

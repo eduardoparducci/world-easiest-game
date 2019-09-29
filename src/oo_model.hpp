@@ -29,12 +29,14 @@ class Map {
 private:
   // Map Dimension
   int height;
-  int width;  
+  int width;
+  int victory_line;
 
 public:
-  Map(int width, int height);
+  Map(int width, int height, int victory_line);
   int get_height();
   int get_width();
+  int get_victory_line();
   bool is_valid(int x, int y);
 };
 
