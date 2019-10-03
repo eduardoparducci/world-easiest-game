@@ -48,6 +48,9 @@ Map::Map(int width, int height, int victory_line) {
   this->width = width;
   this->height = height;
   this->victory_line = victory_line;
+  this->playing = true;
+  this->victory = false;
+  this->defeat = false;
 }
 
 int Map::get_width() {
@@ -62,10 +65,30 @@ int Map::get_victory_line() {
 }
   
 bool Map::is_valid(int x, int y) {
+  // Checck boundaries of the map
   if(x>=this->width  || x<=0) return false;
   if(y>=this->height || y<=0) return false;
   return true;
 }
+
+bool Map::is_victory() {
+  return this->victory;
+}
+
+bool Map::is_defeat() {
+  return this->defeat;
+}
+
+bool Map::is_playing() {
+  return this->playing;
+}
+
+void Map::terminate(bool is_victory) {
+  this->playing = false;
+  if(is_victory) this->victory = true;
+  else this->defeat = true;
+}
+
 
 Physics::Physics(Player *p1, Map *m1) {
   this->p1 = p1;
@@ -76,21 +99,26 @@ void Physics::walk(char direction) {
 
   int old_x = this->p1->get_x();
   int old_y = this->p1->get_y();
-  
-  switch(direction) {
-  case 's':
-    if(m1->is_valid(old_x, old_y+1)) this->p1->update(old_x, old_y+1);
-    break;
-  case 'w':
-    if(m1->is_valid(old_x, old_y-1)) this->p1->update(old_x, old_y-1);
-    break;
-  case 'd':
-    if(m1->is_valid(old_x+1, old_y)) this->p1->update(old_x+1, old_y);
-    break;
-  case 'a':
-    if(m1->is_valid(old_x-1, old_y)) this->p1->update(old_x-1, old_y);
-    break;
+  if(m1->is_playing()) {
+    switch(direction) {
+    case 's':
+      if(m1->is_valid(old_x, old_y+1)) this->p1->update(old_x, old_y+1);
+      break;
+    case 'w':
+      if(m1->is_valid(old_x, old_y-1)) this->p1->update(old_x, old_y-1);
+      break;
+    case 'd':
+      if(m1->is_valid(old_x+1, old_y)) this->p1->update(old_x+1, old_y);
+      break;
+    case 'a':
+      if(m1->is_valid(old_x-1, old_y)) this->p1->update(old_x-1, old_y);
+      break;
+    }
   }
+
+  // Verify victory
+  if(this->p1->get_y() > this->m1->get_victory_line())
+    this->m1->terminate(true);
 }
 
 Screen::Screen(Map *m1, Player *p1, float maxX, float maxY, int maxI, int maxJ) {
@@ -140,7 +168,7 @@ void Screen::init() {
 	
   // Victory Area
   for(i=1;i<m1->get_width();i++) {
-    move(m1->get_height()-this->m1->get_victory_line(),i);
+    move(this->m1->get_victory_line(),i);
     echochar('*');
   }
 	
@@ -150,18 +178,45 @@ void Screen::init() {
 
 void Screen::update() {
 
-  // Erase Player from screen
-  char c;
-  move(this->p1->get_old_y(), this->p1->get_old_x());
-  if(this->p1->get_old_y()==m1->get_height()-this->m1->get_victory_line())
-  	echochar('*');
-	else 
-	  echochar(' ');
+  if(this->m1->is_playing()) {
+    // Erase Player from screen
+    char c;
+    move(this->p1->get_old_y(), this->p1->get_old_x());
+    if(this->p1->get_old_y()==this->m1->get_victory_line())
+      echochar('*');
+    else 
+      echochar(' ');
 
-  // Draw Player on the screen
-  move(this->p1->get_y(), this->p1->get_x());
-  echochar('P');
+    // Draw Player on the screen
+    move(this->p1->get_y(), this->p1->get_x());
+    echochar('P');
 
+    // Atualiza tela
+    refresh();
+  } else {
+    if(this->m1->is_victory()) this->win();
+  }
+}
+
+void Screen::win() {
+
+  int i;
+  // Erase Screen
+  for(i=0 ; i<this->maxI ; i++) {
+    move(i, 0);
+    if(i==this->maxI/2-1) {
+      // Write victory message in the middle height
+      move(i, this->maxJ/2-15);
+      printw("+---------------------------+");
+      move(++i, this->maxJ/2-15);
+      printw("| CONGRATULATIONS, YOU WON! |");
+      move(++i, this->maxJ/2-15);
+      printw("+---------------------------+");
+      move(++i, this->maxJ/2-15);
+      printw("press \'q\' to quit");
+    } else
+      echochar('\n');
+  }
   // Atualiza tela
   refresh();
 }

@@ -17,7 +17,7 @@ uint64_t get_now_ms() {
 int main ()
 {
   Player *p0 = new Player(1,1);
-  Map *m0 = new Map(8,15,3);
+  Map *m0 = new Map(8,15,12);
   Physics *f = new Physics(p0, m0);
 
   Screen *screen = new Screen(m0, p0, 50, 50, 50, 50);
@@ -28,7 +28,7 @@ int main ()
 
   while (1) {
 
-    // Lê o teclado
+    // Read keyboard
     char c = keyboard->getchar();
     f->walk(c);
     

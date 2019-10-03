@@ -31,6 +31,9 @@ private:
   int height;
   int width;
   int victory_line;
+  bool playing;
+  bool victory;
+  bool defeat;
 
 public:
   Map(int width, int height, int victory_line);
@@ -38,6 +41,10 @@ public:
   int get_width();
   int get_victory_line();
   bool is_valid(int x, int y);
+  bool is_victory();
+  bool is_defeat();
+  bool is_playing();
+  void terminate(bool is_victory);
 };
 
 class Physics {
@@ -64,6 +71,8 @@ class Screen {
     void stop();
     void init();
     void update();
+    void win();
+    void lose();
 };
 
 void threadfun (char *keybuffer, int *control);
