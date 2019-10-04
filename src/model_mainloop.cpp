@@ -18,12 +18,23 @@ int main ()
 {
   Player *p0 = new Player(1,1);
   Map *m0 = new Map(8,15,12);
-  Physics *f = new Physics(p0, m0);
 
-  Screen *screen = new Screen(m0, p0, 50, 50, 50, 50);
-  screen->init();
+  Obstacle *o0 = new Obstacle(2,5);
+  Obstacle *o1 = new Obstacle(3,3);
+  ObstacleList *obs = new ObstacleList();
 
+  obs->add_obstacle(o0);
+  obs->add_obstacle(o1);
+
+  Physics *f = new Physics(p0, m0, obs);
+
+  Screen *screen = new Screen(m0, p0, obs, 50, 50, 50, 50);
   Keyboard *keyboard = new Keyboard();
+
+
+
+
+  screen->init();
   keyboard->init();
 
   while (1) {

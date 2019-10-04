@@ -22,7 +22,29 @@ public:
   int get_y();
   int get_old_x();
   int get_old_y();
+};
 
+class Obstacle {
+private:
+  // Position atributes
+  int x;
+  int y;
+
+public:
+  Obstacle(int x, int y);
+  int get_x();
+  int get_y();
+};
+
+class ObstacleList {
+private:
+  std::vector<Obstacle*> *obstacles;
+
+public:
+  ObstacleList();
+  void add_obstacle(Obstacle *o);
+  bool hit(int x, int y);
+  std::vector<Obstacle*> *get_obstacles();
 };
 
 class Map {
@@ -51,44 +73,46 @@ class Physics {
 private:
   Player *p1;
   Map *m1;
-  
+  ObstacleList *obs;
+
 public:
-  Physics(Player *p1, Map *m1);
+  Physics(Player *p1, Map *m1, ObstacleList *obs);
   // w=Up, s=Down, a=Left, d=Right
   void walk(char direction);
 };
 
 class Screen {
-  private:
-    Map *m1;
-    Player *p1;
-    int maxI, maxJ;
-    float maxX, maxY;
-
-  public:
-    Screen(Map *m1, Player *p1, float maxX, float maxY, int maxI, int maxJ);
-    ~Screen(); 
-    void stop();
-    void init();
-    void update();
-    void win();
-    void lose();
+private:
+  Map *m1;
+  Player *p1;
+  ObstacleList *obs;
+  int maxI, maxJ;
+  float maxX, maxY;
+  
+public:
+  Screen(Map *m1, Player *p1, ObstacleList *obs, float maxX, float maxY, int maxI, int maxJ);
+  ~Screen(); 
+  void stop();
+  void init();
+  void update();
+  void win();
+  void lose();
 };
 
 void threadfun (char *keybuffer, int *control);
 
 class Keyboard {
-  private:
-    char last_char;
-    int running;
+private:
+  char last_char;
+  int running;
 
-    std::thread kb_thread;
+  std::thread kb_thread;
 
-  public:
-    Keyboard();
-    ~Keyboard();
-    void stop();
-    void init();
-    char getchar();
+public:
+  Keyboard();
+  ~Keyboard();
+  void stop();
+  void init();
+  char getchar();
 };
 #endif
