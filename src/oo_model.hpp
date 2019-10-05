@@ -27,18 +27,27 @@ public:
 class Obstacle {
 private:
   // Position atributes
-  int x;
-  int y;
-
+  float old_x;
+  float old_y;
+  float x;
+  float y;
+  float vx;
+  float vy;
+  
 public:
-  Obstacle(int x, int y);
-  int get_x();
-  int get_y();
+  Obstacle(float x, float y, float vx, float vy);
+  float get_x();
+  float get_y();
+  float get_old_x();
+  float get_old_y();
+  float get_vx();
+  float get_vy();
+  void update(float new_x, float new_y, float new_vx, float new_vy);
 };
 
 class ObstacleList {
 private:
-  std::vector<Obstacle*> *obstacles;
+  std::vector<Obstacle *> *obstacles;
 
 public:
   ObstacleList();
@@ -77,8 +86,8 @@ private:
 
 public:
   Physics(Player *p1, Map *m1, ObstacleList *obs);
-  // w=Up, s=Down, a=Left, d=Right
   void walk(char direction);
+  void update(float deltaT);
 };
 
 class Screen {

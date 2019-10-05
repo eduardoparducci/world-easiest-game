@@ -40,17 +40,46 @@ int Player::get_old_y() {
   return this->old_y;
 }
 
-Obstacle::Obstacle(int x, int y) {
+Obstacle::Obstacle(float x, float y, float vx, float vy) {
   this->x = x;
   this->y = y;
+  this->old_x = x;
+  this->old_y = y;
+  this->vx = vx;
+  this->vy = vy;
 }
 
-int Obstacle::get_x() {
+float Obstacle::get_x() {
   return this->x;
 }
 
-int Obstacle::get_y() {
+float Obstacle::get_y() {
   return this->y;
+}
+
+float Obstacle::get_old_x() {
+  return this->old_x;
+}
+
+float Obstacle::get_old_y() {
+  return this->old_y;
+}
+
+float Obstacle::get_vx() {
+  return this->vx;
+}
+
+float Obstacle::get_vy() {
+  return this->vy;
+}
+
+void Obstacle::update(float new_x, float new_y, float new_vx, float new_vy) {
+  this->old_x = this->x;
+  this->old_y = this->y;
+  this->x = new_x;
+  this->y = new_y;
+  this->vx = new_vx;
+  this->vy = new_vy;
 }
 
 ObstacleList::ObstacleList() {
@@ -64,7 +93,7 @@ void ObstacleList::add_obstacle(Obstacle *o) {
 bool ObstacleList::hit(int x, int y) {
   std::vector<Obstacle *> *o = this->obstacles;
   for (int i = 0 ; i < (int)(*o).size() ; i++)
-    if( x == (*o)[i]->get_x() && y == (*o)[i]->get_y())
+    if( x == (int)(*o)[i]->get_x() && y == (int)(*o)[i]->get_y())
       return true;
   return false;
 }
@@ -152,8 +181,27 @@ void Physics::walk(char direction) {
   // Verify defeat
   if(this->obs->hit(x,y))
     this->m1->terminate(false);
+}
 
+void Physics::update(float deltaT) {
 
+  std::vector<Obstacle *> *o = this->obs->get_obstacles();
+
+  for (int i = 0; i < (int)(*o).size(); i++) {
+
+    float vx  = (*o)[i]->get_vx();
+    float vy  = (*o)[i]->get_vy();    
+    float new_x = (*o)[i]->get_x() + deltaT * vx/1000;
+    float new_y = (*o)[i]->get_y() + deltaT * vy/1000;
+
+    if(this->m1->is_valid((int)new_x, (int)new_y)==false) {
+      vx  = -vx;
+      vy  = -vy;
+      new_x = (*o)[i]->get_x();
+      new_y = (*o)[i]->get_y();
+    }
+    (*o)[i]->update(new_x, new_y, vx, vy);   
+  }
 }
 
 Screen::Screen(Map *m1, Player *p1, ObstacleList *obs, float maxX, float maxY, int maxI, int maxJ) {
@@ -209,7 +257,7 @@ void Screen::init() {
     echochar('*');
   }
 	
-  // Victory Area
+  // Obstables Area
   for(i=0;i<(int)(*o).size();i++) {
     move((*o)[i]->get_y(),(*o)[i]->get_x());
     echochar('#');
@@ -220,19 +268,37 @@ void Screen::init() {
 
 void Screen::update() {
 
+  std::vector<Obstacle *> *o = this->obs->get_obstacles();
+
   if(this->m1->is_playing()) {
+    
     // Erase Player from screen
-    char c;
     move(this->p1->get_old_y(), this->p1->get_old_x());
     if(this->p1->get_old_y()==this->m1->get_victory_line())
       echochar('*');
     else 
       echochar(' ');
 
-    // Draw Player on the screen
+    // Erase Obstacles from screen
+    for (int i = 0; i < (int)(*o).size(); i++) {
+    
+      move((int)(*o)[i]->get_old_y(), (int)(*o)[i]->get_old_x());
+      if((int)(*o)[i]->get_old_y()==this->m1->get_victory_line())
+        echochar('*');
+      else 
+        echochar(' ');
+    }
+    
+    // Draw Player on the screenn
     move(this->p1->get_y(), this->p1->get_x());
     echochar('P');
 
+    // Draw Obstacles on the screen
+    for (int i = 0; i < (int)(*o).size(); i++) {
+      move((int)(*o)[i]->get_y(), (int)(*o)[i]->get_x());
+      echochar('#');
+    }
+    
     // Atualiza tela
     refresh();
   } else {
