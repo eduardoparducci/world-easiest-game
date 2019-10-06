@@ -1,9 +1,9 @@
 # Telas do Jogo
-    Fluxo de telas do jogo. 
-    Obs: Os quadros com texto devem estar posicionados no meio da tela. Olhar telas implementadas para ver como isso é feito.
+Fluxo de telas do jogo. 
+Obs: Os quadros com texto devem estar posicionados no meio da tela. Olhar telas implementadas para ver como isso é feito.
 
 ## 1- Tela inicial
-    Tela contendo o objetivo do jogo e as instruções de movimentação.
+Tela contendo o objetivo do jogo e as instruções de movimentação.
 
 ```
 +---------------------------------+
@@ -29,7 +29,7 @@
 ```
 
 ## 2- Tela de jogo
-    Tela contendo o mapa do jogo e a informação de vidas restantes.
+Tela contendo o mapa do jogo e a informação de vidas restantes.
 
 ```
   +-------+---------+--+
@@ -42,7 +42,7 @@
 ```
 
 ## 3- Tela de vitória (parcialmente implementado)
-    Tela contendo a informação de fim de jogo vitorioso.
+Tela contendo a informação de fim de jogo vitorioso.
 
 ```
 +---------------------------+
@@ -53,7 +53,7 @@
 ```
 
 ## 3- Tela de derrota (com vidas restantes)
-    Tela contendo a informação de vidas restantes.
+Tela contendo a informação de vidas restantes.
 
 ```
 +---------------------------+
@@ -67,7 +67,7 @@
 
 
 ## 4- Tela de derrota (sem vidas restantes)
-    Tela contendo a informação de fim de jogo com derrota.
+Tela contendo a informação de fim de jogo com derrota.
 
 ```
 +----------------------+
