@@ -35,14 +35,13 @@ int main ()
   obs->add_obstacle(o4);
   obs->add_obstacle(o5);
 
-
   Physics *f = new Physics(p0, m0, obs);
 
   Screen *screen = new Screen(m0, p0, obs, 50, 50, 50, 50);
   Keyboard *keyboard = new Keyboard();
 
   uint64_t t0;
-  uint64_t t1;
+  uint64_t t1=0;
   uint64_t deltaT;
   uint64_t T;
 
@@ -57,7 +56,6 @@ int main ()
     t0 = t1;
     t1 = get_now_ms();
     deltaT = t1-t0;
-
 
     // Read keyboard
     char c = keyboard->getchar();
