@@ -279,21 +279,22 @@ void Screen::update() {
     else 
       echochar(' ');
 
-    // Erase Obstacles from screen
+    // Erase Obstacles from screen if they have movement
     for (int i = 0; i < (int)(*o).size(); i++) {
-    
-      move((int)(*o)[i]->get_old_y(), (int)(*o)[i]->get_old_x());
-      if((int)(*o)[i]->get_old_y()==this->m1->get_victory_line())
-        echochar('*');
-      else 
-        echochar(' ');
+      if((*o)[i]->get_vy() != 0 || (*o)[i]->get_vx() != 0) {
+        move((int)(*o)[i]->get_old_y(), (int)(*o)[i]->get_old_x());
+        if((int)(*o)[i]->get_old_y()==this->m1->get_victory_line())
+          echochar('*');
+        else 
+          echochar(' ');
+      }
     }
     
     // Draw Player on the screenn
     move(this->p1->get_y(), this->p1->get_x());
     echochar('P');
 
-    // Draw Obstacles on the screen
+    // Draw Obstacles on the screen 
     for (int i = 0; i < (int)(*o).size(); i++) {
       move((int)(*o)[i]->get_y(), (int)(*o)[i]->get_x());
       echochar('#');
