@@ -85,8 +85,17 @@ int main ()
   uint64_t deltaT;
   uint64_t T;
 
-  screen->init();
+  screen->begin();
   keyboard->init();
+  while(1){
+	  
+	  char c = keyboard->getchar();
+	  if(c=='p')break;
+	  std::this_thread::sleep_for (std::chrono::milliseconds(50));
+  }
+	
+  screen->init();
+  
 
 
   T = get_now_ms();

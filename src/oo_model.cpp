@@ -213,8 +213,34 @@ Screen::Screen(Map *m1, Player *p1, ObstacleList *obs, float maxX, float maxY, i
   this->maxJ = maxJ;
   this->maxI = maxI;
 }
+void Screen::begin() {
+  initscr();			 /* Start curses mode 		*/
+  raw();				 /* Line buffering disabled	*/
+  curs_set(0);
+	getmaxyx(stdscr, this->maxI, this->maxJ);
+  int i;
+  // Erase Screen
+  for(i=0 ; i<this->maxI ; i++) {
+    move(i, 0);
+    if(i==this->maxI/2-1) {
+      // Write victory message in the middle heightchar c = keyboard->getchar();
+      move(i, this->maxJ/2-15);
+      printw("+--------------------------------------+");
+      move(++i, this->maxJ/2-15);
+      printw("| Welcome to the World's Easiest Game! |");
+      move(++i, this->maxJ/2-15);
+      printw("+--------------------------------------+");
+      move(++i, this->maxJ/2-15);
+      printw("press \'p\' to play");
+    } else
+      echochar('\n');
+  }
+  // Atualiza tela
+  refresh();
+}
 
 void Screen::init() {
+  clear();
   initscr();			 /* Start curses mode 		*/
   raw();				 /* Line buffering disabled	*/
   curs_set(0);           /* Do not display cursor   */
@@ -309,7 +335,7 @@ void Screen::update() {
 }
 
 void Screen::win() {
-
+  clear();
   int i;
   // Erase Screen
   for(i=0 ; i<this->maxI ; i++) {
@@ -332,7 +358,7 @@ void Screen::win() {
 }
 
 void Screen::lose() {
-
+  clear();
   int i;
   // Erase Screen
   for(i=0 ; i<this->maxI ; i++) {

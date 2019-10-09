@@ -106,6 +106,7 @@ public:
   void update();
   void win();
   void lose();
+  void begin();
 };
 
 void threadfun (char *keybuffer, int *control);
